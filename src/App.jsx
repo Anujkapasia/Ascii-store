@@ -43,7 +43,7 @@ function Products() {
 
     const fetchFromApi = (page ,sortType = sort )=>{
         setProgress(true)
-        return fetch(`http://localhost:3000/products?_page=${page}&_limit=50&_sort=${sortType}`).then(res => res.json())
+        return fetch(`/products?_page=${page}&_limit=50&_sort=${sortType}`).then(res => res.json())
 
     }
 
@@ -115,7 +115,7 @@ function Products() {
                         </div>
                     </div>
                 </div>
-                <img className="ad" src={`http://localhost:3000/ads/?r=${adArray[adArray.length-1]}`}/>
+                <img className="ad" src={`/ads/?r=${adArray[adArray.length-1]}`}/>
             </div>
 
             <div className="products-grid"  >
