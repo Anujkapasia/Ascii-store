@@ -8,36 +8,46 @@ function Products() {
     const [nextPage , changePage] = useState(1)
     const [nextBatch , setNext] = useState([])
     const [fetchInProgress , setProgress] = useState(true)
+    const [sort , setSort] = useState("none")
+    const [showOptions , setOptionsShow ] = useState(false)
+    const [pageEnd , setPageEnd] = useState(false)
 
-    useEffect(async ()=>{
-        const data = await fetchFromApi(nextPage)
-        setProgress(false)
-        updateStore(data)
-        changePage(prev=>prev+1)
-        
+    useEffect(()=>{
+        InitialiseHandler()
     },[])
 
-    const updateStore =(vals)=>{
-        setStore(prev=>[...prev,...vals])
-        fetchNext()
+    const InitialiseHandler =async (sortType)=>{
+        const data = await fetchFromApi(1,sortType)
+        setProgress(false)
+        updateStore(data,sortType)
+        changePage(prev=>prev+1)
     }
 
-    const fetchNext =async ()=>{
-        const data = await fetchFromApi(nextPage+1)
+    const updateStore =(vals,sortType)=>{
+        setStore(prev=>[...prev,...vals])
+        fetchNext(sortType)
+        if(store.length===450){
+            setPageEnd(true)
+            setProgress(false)
+        }
+    }
+
+    const fetchNext =async (sortType)=>{
+        const data = await fetchFromApi(nextPage+1,sortType)
         setProgress(false)
         setNext(data)
         changePage(prev=>prev+1)
     }
 
-    const fetchFromApi = (page)=>{
+    const fetchFromApi = (page ,sortType = sort )=>{
         setProgress(true)
-        return fetch(`http://localhost:3000/products?_page=${page}&_limit=25`).then(res => res.json())
+        return fetch(`http://localhost:3000/products?_page=${page}&_limit=50&_sort=${sortType}`).then(res => res.json())
 
     }
 
     const scrollHandler=(e)=>{
         const end = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
-        if(end && !fetchInProgress)
+        if(end && !fetchInProgress && !pageEnd)
             updateStore(nextBatch);
     }
 
@@ -48,7 +58,7 @@ function Products() {
         const days = time/1000*60*60*24
 
         if( days>7 ){
-            return date_.getDate() + "-" + date_.getMonth() + "-" + date_.getFullYear()
+            return date_.getDate() + "/" + date_.getMonth() + "/" + date_.getFullYear()
         }else if ( days>1 ){
             return days + " days ago"
         }else if ( days===1 ){
@@ -60,11 +70,38 @@ function Products() {
     }
 
 
+    const sortResetHandler =(val)=>{
+        setSort(val)
+        setStore([])
+        changePage(1)
+        setNext([])
+        setProgress(true)
+        
+        InitialiseHandler(val)
+
+    }
+
+
     return (
         <div className="page-container" onScroll={(e)=>scrollHandler(e)} >
+
             <div className="page-header" >
-                <span id="base-ascii" >(. ͡❛ ₃ ͡❛.)</span>
+                <div id="head-title" >(◕‿◕)</div>
+                <div id="head-subtitle" >Store for all your ascii needs.</div>
+                <div id="sort-container" >
+                    <span>Sort by :</span>
+                    <div id="sort-option" onClick={()=>setOptionsShow(prev=>!prev)} >
+                        <span>{sort}</span>
+                        <div id="options-container" className={showOptions?"show-container":""} >
+                            <div onClick={()=>sortResetHandler("none")} >none</div>
+                            <div onClick={()=>sortResetHandler("price")} >price</div>
+                            <div onClick={()=>sortResetHandler("size")} >size</div>
+                            <div onClick={()=>sortResetHandler("id")} >id</div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
             <div className="products-grid"  >
                 {
                     store.map((product)=>{
@@ -81,13 +118,19 @@ function Products() {
                     })
                 }
             </div>
+            {
+                pageEnd&&<div className="end-message" >~ end of catalogue ~</div>
+            }
+            {/* loader animation */}
             {fetchInProgress&&
-            <div className="content">
-            <div className="loading">
-            <p>loading</p>
-                <span></span>
-            </div>
-            </div>}
+                <div className="content">
+                <div className="loading">
+                <p>loading</p>
+                    <span></span>
+                </div>
+                </div>
+            }
+
         </div>
     )
 }
