@@ -1,0 +1,252 @@
+$background-color:#fccde2;
+$priamry-color:#fcefee;
+$text-color:#364f6b;
+$highlight-color:#fc5c9c;
+$font-01: "Oxygen", sans-serif;
+
+*{
+    margin: 0;
+    border: none;
+    padding: 0;
+    outline: none;
+    font-family: $font-01;
+
+}
+
+.page-container{
+    width: 100%;
+    height: 100vh;
+    background-color: $background-color;
+    overflow-x: hidden;
+    
+}
+
+.page-header{
+    width: 100%;
+    height:300px;
+    color: $highlight-color;
+    font-size: 150px;
+    display: grid;
+    place-items: center;
+}
+
+@keyframes float {
+	0% {
+		text-shadow: 0 5px 15px rgba(0,0,0,0.3);
+		transform: translatey(0px);
+	}
+	50% {
+		text-shadow: 0 25px 15px rgba(0,0,0,0.2);
+		transform: translatey(-20px);
+	}
+	100% {
+		text-shadow: 0 5px 15px rgba(0,0,0,0.3);
+		transform: translatey(0px);
+	}
+}
+
+#base-ascii{
+    animation: float 3s ease-in-out infinite;
+    text-shadow: 0 5px 15px rgba(0,0,0,0.6);
+	transform: translatey(0px);
+
+}
+
+
+.products-grid{
+    display: flex;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    padding: 100px;
+    // display: grid;
+    // grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    // grid-gap: 20px;
+    // align-items: stretch;
+}
+
+#card-wrapper{
+    background-color: $priamry-color;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    border-radius: 10px;
+    transition:200ms;
+    margin-left:10px;
+    margin-bottom:10px;
+    padding:10px;
+
+    &:hover{
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+    }
+
+}
+
+.card-top{
+    font-size: 12px;
+    font-weight: bold;
+    padding:5px 10px;
+    width: 100%;
+    box-sizing: border-box;
+    color:#999;
+
+
+}
+
+.card-content{
+    width:100%;
+    color: $text-color;
+    text-align: center;
+    white-space: nowrap;
+
+}
+
+.card-foot{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding:10px;
+    box-sizing: border-box;
+
+    #price{
+        font-size:18px;
+        font-weight: bold;
+        color: $text-color;
+    }
+
+    #time{
+        font-size: 14px;
+        color:#999;
+
+    }
+}
+
+
+//loader animation css
+
+
+
+
+
+.content {
+    margin-bottom:100px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+
+   .loading {
+      width: 80px;
+      height: 50px;
+      position: relative;
+
+      p {
+         top: 0;
+         padding: 0;
+         margin: 0;
+         color: $priamry-color;
+         font-family: $font-01;
+         animation: text 3.5s ease both infinite;
+         font-size: 12px;
+         letter-spacing: 1px;
+
+         @keyframes text {
+            0% {
+               letter-spacing: 1px;
+               transform: translateX(0px);
+            }
+
+            40% {
+               letter-spacing: 2px;
+               transform: translateX(26px);
+            }
+
+            80% {
+               letter-spacing: 1px;
+               transform: translateX(32px);
+            }
+
+            90% {
+               letter-spacing: 2px;
+               transform: translateX(0px);
+            }
+
+            100% {
+               letter-spacing: 1px;
+               transform: translateX(0px);
+            }
+         }
+      }
+      span {
+         background-color:$priamry-color;
+         border-radius: 50px;
+         display: block;
+         height: 16px;
+         width: 16px;
+         bottom: 0;
+         position: absolute;
+         transform: translateX(64px);
+         animation: loading 3.5s ease both infinite;
+
+         &:before {
+            position: absolute;
+            content: "";
+            width: 100%;
+            height: 100%;
+            background-color: $highlight-color;
+            border-radius: inherit;
+            animation: loading2 3.5s ease both infinite;
+         }
+
+         @keyframes loading {
+            0% {
+               width: 16px;
+               transform: translateX(0px);
+            }
+
+            40% {
+               width: 100%;
+               transform: translateX(0px);
+            }
+
+            80% {
+               width: 16px;
+               transform: translateX(64px);
+            } 
+
+            90% {
+               width: 100%;
+               transform: translateX(0px);
+            }
+
+            100% {
+               width: 16px;
+               transform: translateX(0px);
+            }
+         }
+         @keyframes loading2 {
+            0% {
+               transform: translateX(0px);
+               width: 16px;
+            }
+
+            40% {
+               transform: translateX(0%);
+               width: 80%;
+            }
+
+           80% {
+               width: 100%;
+               transform: translateX(0px);
+            }
+
+            90% {
+               width: 80%;
+            transform: translateX(15px);
+            }
+            100% {
+               transform: translateX(0px);
+               width: 16px;
+            }
+         }
+      }
+   }
+}
+
