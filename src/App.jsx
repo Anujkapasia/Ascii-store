@@ -83,9 +83,9 @@ function Products() {
 
     }
 
-    function generateRandom(min, max) {
+    const generateRandom=()=> {
         var num = Math.floor(Math.random()*1000);
-        return (adArray.includes()) ? generateRandom(min, max) : num;
+        return (adArray.includes()) ? generateRandom() : num;
     }
 
     const generateNewAd =()=>{
