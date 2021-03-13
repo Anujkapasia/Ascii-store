@@ -11,9 +11,11 @@ function Products() {
     const [sort , setSort] = useState("none")
     const [showOptions , setOptionsShow ] = useState(false)
     const [pageEnd , setPageEnd] = useState(false)
+    const [adArray , setAdArray] = useState([])
 
     useEffect(()=>{
         InitialiseHandler()
+        generateNewAd()
     },[])
 
     const InitialiseHandler =async (sortType)=>{
@@ -81,11 +83,24 @@ function Products() {
 
     }
 
+    function generateRandom(min, max) {
+        var num = Math.floor(Math.random()*1000);
+        return (adArray.includes()) ? generateRandom(min, max) : num;
+    }
+
+    const generateNewAd =()=>{
+        setAdArray([generateRandom()])
+        setInterval(()=>{
+            setAdArray(prev=>[...prev,generateRandom()])
+        },20000)
+    }
+
 
     return (
         <div className="page-container" onScroll={(e)=>scrollHandler(e)} >
 
             <div className="page-header" >
+
                 <div id="head-title" >(◕‿◕)</div>
                 <div id="head-subtitle" >Store for all your ascii needs.</div>
                 <div id="sort-container" >
@@ -100,6 +115,7 @@ function Products() {
                         </div>
                     </div>
                 </div>
+                <img className="ad" src={`http://localhost:3000/ads/?r=${adArray[adArray.length-1]}`}/>
             </div>
 
             <div className="products-grid"  >
