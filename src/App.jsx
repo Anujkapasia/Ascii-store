@@ -101,8 +101,11 @@ function Products() {
 
             <div className="page-header" >
 
-                <div id="head-title" >(◕‿◕)</div>
-                <div id="head-subtitle" >Store for all your ascii needs.</div>
+                <div id="head-title" >Products Grid</div>
+                <div className="head-subtitle" >Here you're sure to find a bargain on some of the finest ascii available to purchase. Be sure to peruse our selection of ascii faces in an exciting range of sizes and prices.</div>
+                <div className="head-subtitle">But first, a word from our sponsors:</div>
+                <img className="ad" src={`http://localhost:3000//ads/?r=${adArray[adArray.length-1]}`}/>
+                
                 <div id="sort-container" >
                     <span>Sort by :</span>
                     <div id="sort-option" onClick={()=>setOptionsShow(prev=>!prev)} >
@@ -115,7 +118,6 @@ function Products() {
                         </div>
                     </div>
                 </div>
-                <img className="ad" src={`/ads/?r=${adArray[adArray.length-1]}`}/>
             </div>
 
             <div className="products-grid"  >
