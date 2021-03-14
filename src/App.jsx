@@ -18,6 +18,14 @@ function Products() {
         generateNewAd()
     },[])
 
+    //this function fetches data in json from server api
+    const fetchFromApi = (page ,sortType = sort )=>{
+        setProgress(true)
+        return fetch(`/products?_page=${page}&_limit=50&_sort=${sortType}`).then(res => res.json())
+
+    }
+
+    //Below function initialises the process of fetching from store in begining or after sort change
     const InitialiseHandler =async (sortType)=>{
         const data = await fetchFromApi(1,sortType)
         setProgress(false)
@@ -25,31 +33,32 @@ function Products() {
         changePage(prev=>prev+1)
     }
 
+    //updateStore updates current array of visible ascii
     const updateStore =(vals,sortType)=>{
         setStore(prev=>[...prev,...vals])
         fetchNext(sortType)
-        if(store.length===450){
-            setPageEnd(true)
-            setProgress(false)
-        }
+
     }
 
     const fetchNext =async (sortType)=>{
         const data = await fetchFromApi(nextPage+1,sortType)
+
+        //this part of code checks if we have data to show for our next scroll update, if not it changes page end to true
+        if(data.length===0){
+            setPageEnd(true)
+        }
+
         setProgress(false)
         setNext(data)
         changePage(prev=>prev+1)
     }
 
-    const fetchFromApi = (page ,sortType = sort )=>{
-        setProgress(true)
-        return fetch(`/products?_page=${page}&_limit=50&_sort=${sortType}`).then(res => res.json())
-
-    }
-
+    
+    
     const scrollHandler=(e)=>{
-        const end = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
-        if(end && !fetchInProgress && !pageEnd)
+        const endOfPage = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
+        
+        if(endOfPage && !fetchInProgress && !pageEnd)
             updateStore(nextBatch);
     }
 
@@ -71,23 +80,24 @@ function Products() {
 
     }
 
-
-    const sortResetHandler =(val)=>{
-        setSort(val)
+    //below function resets the states and re-initialise whole process on sort change
+    const sortResetHandler =(newSort)=>{
+        setSort(newSort)
         setStore([])
         changePage(1)
         setNext([])
         setProgress(true)
         
-        InitialiseHandler(val)
+        InitialiseHandler(newSort)
 
     }
 
-    function generateRandom(min, max) {
+    const generateRandom=()=> {
         var num = Math.floor(Math.random()*1000);
-        return (adArray.includes()) ? generateRandom(min, max) : num;
+        return (adArray.includes()) ? generateRandom() : num;
     }
 
+    //for initialisation of ads in our application
     const generateNewAd =()=>{
         setAdArray([generateRandom()])
         setInterval(()=>{
@@ -104,7 +114,7 @@ function Products() {
                 <div id="head-title" >Products Grid</div>
                 <div className="head-subtitle" >Here you're sure to find a bargain on some of the finest ascii available to purchase. Be sure to peruse our selection of ascii faces in an exciting range of sizes and prices.</div>
                 <div className="head-subtitle">But first, a word from our sponsors:</div>
-                <img className="ad" src={`http://localhost:3000//ads/?r=${adArray[adArray.length-1]}`}/>
+                <img className="ad" src={`/ads/?r=${adArray[adArray.length-1]}`}/>
                 
                 <div id="sort-container" >
                     <span>Sort by :</span>
@@ -137,7 +147,7 @@ function Products() {
                 }
             </div>
             {
-                pageEnd&&<div className="end-message" >~ end of catalogue ~</div>
+                pageEnd&&<div className="end-message" >~ End of catalogue ~</div>
             }
             {/* loader animation */}
             {fetchInProgress&&
